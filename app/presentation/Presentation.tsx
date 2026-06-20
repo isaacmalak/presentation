@@ -1,10 +1,13 @@
 "use client";
 
 import { Deck, Fragment, Slide, useReveal } from "@revealjs/react";
+import { ArrowRight } from "lucide-react";
+import { useRef } from "react";
 import RevealHighlight from "reveal.js/plugin/highlight";
 import "reveal.js/plugin/highlight/monokai.css";
 import "reveal.js/reveal.css";
 import "reveal.js/theme/black.css";
+import { AnimatedProblemSlide } from "./slids/ProblemSlide";
 
 function NextSlideButton() {
   const deck = useReveal();
@@ -12,10 +15,11 @@ function NextSlideButton() {
   return (
     <button
       type="button"
-      className="border border-white text-white p-2 rounded-2xl hover:bg-white hover:text-black transition-all duration-300 cursor-pointer font-bold text-2xl"
+      className="border border-white text-white py-2 px-4 rounded-2xl hover:bg-white hover:text-black transition-all duration-300 cursor-pointer font-bold text-2xl"
       onClick={() => deck?.next()}
     >
-      Click me
+      Get Started
+      <ArrowRight className="inline-block ml-2" />
     </button>
   );
 }
@@ -23,31 +27,27 @@ function NextSlideButton() {
 export default function Presentation() {
   return (
     <Deck
-      className="h-full w-full"
+      className="h-full w-full flex flex-col items-start justify-start"
       config={{
-        width: 1280,
+        width: "100%",
         height: 720,
         hash: true,
-        transition: "slide",
+        transition: "none",
+        backgroundTransition: "none",
+        autoAnimate: false,
+        center: false,
       }}
       plugins={[RevealHighlight]}
     >
-      <Slide>
+      <Slide className="slide-start">
         <NextSlideButton />
       </Slide>
-      <Slide>
-        <div className="flex flex-col items-start justify-center"> 
-        <h2>The Problem</h2>
-        <p>New people Joining the stock market every year without any knowledge</p>
-        <Fragment>  
-    <div > 
-    But how can they learn it? Where to start? What is being taught?
-    </div>
 
-
-        </Fragment>
-        </div>
+      <Slide className="p-0 m-0">
+        {/* 6. Render the new component here */}
+        <AnimatedProblemSlide />
       </Slide>
+
       <Slide>
         <h2>The Solution</h2>
         <p>Next.js + reveal.js.</p>

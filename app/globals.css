@@ -41,3 +41,16 @@ body {
 .reveal button {
   font-family: var(--font-marcellus), serif !important;
 }
+
+.reveal .slides > section.slide-start {
+  text-align: left !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.reveal .slides section .fragment {
+  transition: none !important;
+  text-align: left !important;
+}

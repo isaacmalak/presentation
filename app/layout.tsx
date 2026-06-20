@@ -18,11 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body className={`${marcellus.className} min-h-full flex flex-col text-white`}>
-        <p> The Power of Stock Market </p>
-        {children}
-      </body>
+    <html lang="en">
+      <body className={`${marcellus.className} text-white`}>{children}</body>
     </html>
   );
 }
