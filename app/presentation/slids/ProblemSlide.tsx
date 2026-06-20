@@ -6,29 +6,62 @@ import { useRef } from "react";
 export function AnimatedProblemSlide() {
   const slideContentRef = useRef(null);
   const fragmentOneRef = useRef(null);
+  const fragmentTwoRef = useRef(null);
 
   const deck = useReveal();
 
   useGSAP(() => {
-    // 1. Wait until deck is fully initialized
     if (!deck) return;
 
-    // 2. Main slide animation
+    // --- Helper Functions to Lock/Unlock Navigation ---
+    const lockNavigation = () => {
+      deck.configure({ keyboard: false, controls: false });
+    };
+
+    const unlockNavigation = () => {
+      deck.configure({ keyboard: true, controls: true });
+    };
+
+    // 1. Main slide animation
     const anim = gsap.fromTo(
       slideContentRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out", paused: true }
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+        paused: true,
+        onComplete: unlockNavigation, // Unlock when done
+        onReverseComplete: unlockNavigation,
+      }
     );
 
-    // 3. Fragment animation (Typewriter wipe effect)
+    // 2. First Fragment animation
     const fragmentAnim = gsap.fromTo(
       fragmentOneRef.current,
       { clipPath: "inset(0% 100% 0% 0%)" },
       {
         clipPath: "inset(0% 0% 0% 0%)",
-        duration: 1.3,
+        duration: 0.7,
         ease: "steps(40)",
         paused: true,
+        onComplete: unlockNavigation,
+        onReverseComplete: unlockNavigation,
+      }
+    );
+
+    // 3. Second Fragment animation
+    const fragmentTwoAnim = gsap.fromTo(
+      fragmentTwoRef.current,
+      { clipPath: "inset(0% 100% 0% 0%)" },
+      {
+        clipPath: "inset(0% 0% 0% 0%)",
+        duration: 0.7,
+        ease: "steps(40)",
+        paused: true,
+        onComplete: unlockNavigation,
+        onReverseComplete: unlockNavigation,
       }
     );
 
@@ -38,19 +71,21 @@ export function AnimatedProblemSlide() {
         slideContentRef.current &&
         event.currentSlide.contains(slideContentRef.current)
       ) {
-        // 1. Find out which slide we just came from, and which one we are on now
         const prevIndex = event.previousSlide
           ? deck.getIndices(event.previousSlide).h
           : 0;
-
         const currentIndex = event.indexh;
-
+        console.log(
+          "Slide changed. Current index:",
+          currentIndex,
+          "Previous index:",
+          prevIndex
+        );
         // 2. Compare them to determine direction
         if (currentIndex < prevIndex) {
-          // We moved BACKWARDS. Skip the animation to its final visible state immediately.
           anim.progress(1);
         } else {
-          // We moved FORWARDS. Replay the animation normally.
+          lockNavigation(); // Lock navigation right before starting
           anim.restart();
         }
       }
@@ -61,17 +96,25 @@ export function AnimatedProblemSlide() {
       // Because we used className="fragment", event.fragment IS our exact div!
       // No more messy .contains() checks needed.
       if (event.fragment === fragmentOneRef.current) {
+        lockNavigation();
         fragmentAnim.restart();
+      } else if (event.fragment === fragmentTwoRef.current) {
+        lockNavigation();
+        fragmentTwoAnim.restart();
       }
     };
 
     const handleFragmentHidden = (event: { fragment: HTMLElement | null }) => {
       if (event.fragment === fragmentOneRef.current) {
+        lockNavigation();
         fragmentAnim.reverse();
+      } else if (event.fragment === fragmentTwoRef.current) {
+        lockNavigation();
+        fragmentTwoAnim.reverse();
       }
     };
 
-    // 5. Attach listeners
+    // Attach listeners
     deck.on("slidechanged", handleSlideChange);
     deck.on("ready", handleSlideChange);
     deck.on("fragmentshown", handleFragmentShown);
@@ -90,12 +133,12 @@ export function AnimatedProblemSlide() {
       <div ref={slideContentRef} className="flex flex-col items-start ">
         <h2>The Problem</h2>
         <p className="text-start">
-          New people Joining the
+          Every year, thousands of people enter the
           <span className="font-bold text-5xl text-green-700">
             {" "}
             {"stock market"}{" "}
           </span>
-          every year without any knowledge
+          hoping to grow their wealth.
         </p>
       </div>
 
@@ -104,9 +147,15 @@ export function AnimatedProblemSlide() {
       <p ref={fragmentOneRef} className="fragment text-start">
         But how can they learn it? Where to start? What is being taught?
       </p>
-      <p className="fragment">
-        That's where we come in. We will teach them the basics of the stock
-        market and how to invest in it.
+
+      <p ref={fragmentTwoRef} className="fragment">
+        Most people don't fail because they lack motivation.
+        <br /> They fail because they lack
+        <span className="font-bold text-amber-500"> Knowledge</span>
+        .
+        <br /> Our platform provides a clear, structured path that helps
+        beginners understand investing, stocks, and make more informed financial
+        decisions.
       </p>
     </div>
   );
