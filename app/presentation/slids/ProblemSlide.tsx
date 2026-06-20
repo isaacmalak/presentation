@@ -129,33 +129,32 @@ export function AnimatedProblemSlide() {
   }, [deck]);
 
   return (
-    <div className="flex flex-col items-start justify-start  ">
-      <div ref={slideContentRef} className="flex flex-col items-start ">
+    <div className="flex flex-col items-start justify-start">
+      <div ref={slideContentRef} className="flex flex-col items-start">
         <h2>The Problem</h2>
-        <p className="text-start">
-          Every year, thousands of people enter the
-          <span className="font-bold text-5xl text-green-700">
-            {" "}
-            {"stock market"}{" "}
-          </span>
-          hoping to grow their wealth.
+
+        <p className="text-start text-3xl">
+          Millions want to invest in the
+          <span className="font-bold text-green-700"> Stock Market</span>
+          .
+          <br />
+          Few know what is the Stock Market is.
         </p>
       </div>
 
-      {/* Fragment should be in the className as this solves the issue of the
-      fragment not being recognized by reveal.js */}
-      <p ref={fragmentOneRef} className="fragment text-start">
-        But how can they learn it? Where to start? What is being taught?
+      <p ref={fragmentOneRef} className="fragment text-start mt-8 text-2xl">
+        Confusing information.
+        <br />
+        No clear starting point.
       </p>
 
-      <p ref={fragmentTwoRef} className="fragment">
-        Most people don't fail because they lack motivation.
-        <br /> They fail because they lack
-        <span className="font-bold text-amber-500"> Knowledge</span>
-        .
-        <br /> Our platform provides a clear, structured path that helps
-        beginners understand investing, stocks, and make more informed financial
-        decisions.
+      <p ref={fragmentTwoRef} className="fragment text-start mt-8 text-2xl">
+        We simplify investing education.
+        <br />
+        <span className="font-bold text-amber-500">
+          Learn → Understand → Choose your investments{" "}
+        </span>
+        with confidence.
       </p>
     </div>
   );

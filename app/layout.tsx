@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Marcellus_SC } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-const marcellus = Marcellus_SC({
+const outfit = Outfit({
   subsets: ["latin"],
   weight: "400",
 });
@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${marcellus.className} text-white`}>{children}</body>
+      <body className={`${outfit.className} text-white`}>{children}</body>
     </html>
   );
 }
